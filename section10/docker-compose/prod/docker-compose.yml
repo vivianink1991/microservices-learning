@@ -42,8 +42,8 @@ services:
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "accounts"
-#      EUREKA_INSTANCE_PREFERIPADDRESS: false
-#      EUREKA_INSTANCE_HOSTNAME: accounts
+      EUREKA_INSTANCE_PREFERIPADDRESS: false
+      EUREKA_INSTANCE_HOSTNAME: accounts
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -61,8 +61,8 @@ services:
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "loans"
-#      EUREKA_INSTANCE_PREFERIPADDRESS: false
-#      EUREKA_INSTANCE_HOSTNAME: loans
+      EUREKA_INSTANCE_PREFERIPADDRESS: false
+      EUREKA_INSTANCE_HOSTNAME: loans
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -80,8 +80,8 @@ services:
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "cards"
-#      EUREKA_INSTANCE_PREFERIPADDRESS: false
-#      EUREKA_INSTANCE_HOSTNAME: cards
+      EUREKA_INSTANCE_PREFERIPADDRESS: false
+      EUREKA_INSTANCE_HOSTNAME: cards
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -100,8 +100,8 @@ services:
         condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "gatewayserver"
-#      EUREKA_INSTANCE_PREFERIPADDRESS: false
-#      EUREKA_INSTANCE_HOSTNAME: gatewayserver
+      EUREKA_INSTANCE_PREFERIPADDRESS: false
+      EUREKA_INSTANCE_HOSTNAME: gatewayserver
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
