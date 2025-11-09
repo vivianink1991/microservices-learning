@@ -29,3 +29,7 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+# Docker 相关运行数据
+**/docker-compose/**/.data/
+**/docker-compose/**/.data/**
