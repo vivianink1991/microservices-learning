@@ -32,11 +32,16 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 info:
   app:
     name: "gatewayserver"
     description: "Eazy Bank Gateway Server Application"
     version: "1.0.0"
+
 
 logging:
   level:

@@ -50,11 +50,16 @@ management:
   info:
     env:
       enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
 info:
   app:
     name: "loans"
     description: "Eazy Bank Loans Application"
     version: "1.0.0"
+
 logging:
   level:
     com:
