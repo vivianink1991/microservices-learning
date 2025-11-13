@@ -203,7 +203,6 @@ services:
   
   configserver:
     image: "eazybytes/configserver:s11"
-    image: "eazybytes/configserver:s11"
     container_name: configserver-ms
     ports:
       - "8071:8071"
