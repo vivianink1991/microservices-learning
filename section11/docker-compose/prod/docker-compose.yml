@@ -12,9 +12,9 @@ services:
       - minio
     healthcheck:
       test: [ "CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3100/ready || exit 1" ]
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 5
+      retries: 20
     networks: &loki-dns
       eazybank:
         aliases:
@@ -87,6 +87,19 @@ services:
       - "9090:9090"
     volumes:
       - ../observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    extends:
+      file: common-config.yml
+      service: network-deploy-service
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4318:4318"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
     extends:
       file: common-config.yml
       service: network-deploy-service
@@ -208,13 +221,15 @@ services:
       - "8071:8071"
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     extends:
       file: common-config.yml
       service: microservice-base-config
+    environment:
+      OTEL_SERVICE_NAME: "configserver"
 
   eurekaserver:
     image: "eazybytes/eurekaserver:s11"
@@ -232,6 +247,7 @@ services:
       service: microservice-configserver-config
     environment:
       SPRING_APPLICATION_NAME: "eurekaserver"
+      OTEL_SERVICE_NAME: "eurekaserver"
 
   accounts:
     image: "eazybytes/accounts:s11"
@@ -240,14 +256,15 @@ services:
       - "8080:8080"
     healthcheck:
       test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       EUREKA_INSTANCE_PREFERIPADDRESS: false
       EUREKA_INSTANCE_HOSTNAME: accounts
+      OTEL_SERVICE_NAME: "accounts"
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -259,14 +276,15 @@ services:
       - "8090:8090"
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "loans"
       EUREKA_INSTANCE_PREFERIPADDRESS: false
       EUREKA_INSTANCE_HOSTNAME: loans
+      OTEL_SERVICE_NAME: "loans"
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -278,14 +296,15 @@ services:
       - "9000:9000"
     healthcheck:
       test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
-      interval: 10s
+      interval: 20s
       timeout: 5s
-      retries: 10
+      retries: 20
       start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "cards"
       EUREKA_INSTANCE_PREFERIPADDRESS: false
       EUREKA_INSTANCE_HOSTNAME: cards
+      OTEL_SERVICE_NAME: "cards"
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
@@ -306,6 +325,7 @@ services:
       SPRING_APPLICATION_NAME: "gatewayserver"
       EUREKA_INSTANCE_PREFERIPADDRESS: false
       EUREKA_INSTANCE_HOSTNAME: gatewayserver
+      OTEL_SERVICE_NAME: "gatewayserver"
     extends:
       file: common-config.yml
       service: microservice-eurekaserver-config
